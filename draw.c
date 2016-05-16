@@ -73,6 +73,23 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
   }
 }
 
+/* WATCHOUT: SCANLINE CONVERSION HAPPENING BELOW */
+void scanline( int xB, int yB, int xM, int yM, int xT, int yT, screen s, color c){
+  int y, m0, m1;
+  y = yB;
+  m0 = (xT-xB)/(yT-yB);
+  m1b = (xM-xB)/(yM-yB);
+  m1t = (xT-xM)/(yT-yM);
+  while( y <= yT ) {
+   if ( y <= yM ){
+     
+    }
+   else {
+
+   }
+  }
+}
+
 
 /*======== void add_sphere() ==========
   Inputs:   struct matrix * points
