@@ -83,18 +83,19 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 }
 
 /* WATCHOUT: SCANLINE CONVERSION HAPPENING BELOW  y-y1=m(x-x1) -> */
-void scanline( int x0, int y0, int x1, int y1, int x2, int y2, screen s, color c){
+void scanline( double x0, double y0, double x1, double y1, double x2, double y2, screen s, color c){
   
   //Horizontal vars
-  int y, xH0, xH1;
+  int y;
+  double xH0, xH1;
   /* TBD 
   //Vertical vars
   int x, yH0, yH1;
   */
   //Bottom top middle stored 
-  int xB, yB, xT, yT, xM, yM, st;
+  double xB, yB, xT, yT, xM, yM, st;
   //Slopes
-  int m0, m1b, m1t;
+  double m0, m1b, m1t;
   
   //Sort y0 y1 y2 from least to largest
   if ( y0 > y1 ) { //if y0 > y1 swap (x0,y0) (x1,y1)
@@ -138,8 +139,8 @@ void scanline( int x0, int y0, int x1, int y1, int x2, int y2, screen s, color c
   while( y < (int)yT ) {
     m0 = (xT-xB)/(yT-yB);
     xH0 = xB + m0*(y-yB);
-    //printf("m0: %d\n", m0);
-    //printf("%d %d %d\n", yB, yM, yT);
+    printf("m0: %f xT:%f xB:%f\n", m0, xT, xB);
+    //printf("%d,%d %d,%d %d,%d\n", xB, yB, xM, yM, xT, yT);
     if ( y < (int)yM ){
       m1b = (xM-xB)/(yM-yB);
       //printf("m1b: %d\n", m1b);
@@ -150,6 +151,7 @@ void scanline( int x0, int y0, int x1, int y1, int x2, int y2, screen s, color c
       //printf("m1t: %d\n", m1t);
       xH1 = xB + m1t*(y-yM);
     }
+    //printf("m0:%d (%d,%d) (%d,%d)\n", m0, xH0, y, xH1, y);
     draw_line( xH0, y, xH1, y, s, c );
     y++;
   }
