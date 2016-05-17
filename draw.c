@@ -73,21 +73,75 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
   }
 }
 
-/* WATCHOUT: SCANLINE CONVERSION HAPPENING BELOW */
-void scanline( int xB, int yB, int xM, int yM, int xT, int yT, screen s, color c){
-  int y, m0, m1;
+/* WATCHOUT: SCANLINE CONVERSION HAPPENING BELOW  y-y1=m(x-x1) -> */
+void scanline( int x0, int y0, int x1, int y1, int x2, int y2, screen s, color c){
+  
+  //Horizontal vars
+  int y, xH0, xH1;
+  /* TBD 
+  //Vertical vars
+  int x, yH0, yH1;
+  */
+  //Bottom top middle stored 
+  int xB, yB, xT, yT, xM, yM, st;
+  //Slopes
+  int m0, m1b, m1t;
+  
+  //Sort y0 y1 y2 from least to largest
+  if ( y0 > y1 ) { //if y0 > y1 swap (x0,y0) (x1,y1)
+    st = y1; //store the smaller value
+    y1 = y0; //set y1 to equal the larger value
+    y0 = st; //set y0 to equal the stored value
+    st = x1;
+    x1 = x0;
+    x0 = st;
+  }
+  if ( y0 > y2 ) { //if y0 > y2 swap (x0,y0) (x2,y2)
+    st = y2; //store the smaller value
+    y2 = y0; //set y2 to equal the larger value
+    y0 = st; //set y0 to equal the stored value
+    st = x2;
+    x2 = x0;
+    x0 = st;
+  }
+  if ( y1 > y2 ) { //if y1 > y2 swap (x1,y1) (x2,y2)
+    st = y2; //store the smaller value;
+    y2 = y1; //set y2 to equal the larger value;
+    y1 = st; //set y1 to equal the stored value
+    st = x2;
+    x2 = x1;
+    x1 = st;
+  }
+  //Set Top Bottom Middle
+  xB = x0;
+  yB = y0;
+  xM = x1;
+  yM = y1;
+  xT = x2;
+  yT = y2;
+  
+  //Set y
   y = yB;
+  
+  //Set slopes for horizontal scanline conversion
   m0 = (xT-xB)/(yT-yB);
   m1b = (xM-xB)/(yM-yB);
   m1t = (xT-xM)/(yT-yM);
+  
+  //Horizontal scanline conversion
   while( y <= yT ) {
+   xH0 = xB + m0*(y-yB);
    if ( y <= yM ){
-     
+     xH1 = xB + m1b*(y-yB);
+     draw_line( xH0, y, xH1, y, s, c );
+     y++;
     }
    else {
-
+     xH1 = xB + m1t*(y-yB);
+     draw_line( xH0, y, xH1, y, s, c );
+     y++;
+    }
    }
-  }
 }
 
 
