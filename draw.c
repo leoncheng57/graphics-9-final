@@ -136,19 +136,19 @@ void scanline( int x0, int y0, int x1, int y1, int x2, int y2, screen s, color c
   
   //Horizontal scanline conversion
   while( y < (int)yT ) {
-    xH0 = xB + m0*(y-yB);
     m0 = (xT-xB)/(yT-yB);
+    xH0 = xB + m0*(y-yB);
     //printf("m0: %d\n", m0);
     //printf("%d %d %d\n", yB, yM, yT);
     if ( y < (int)yM ){
       m1b = (xM-xB)/(yM-yB);
       //printf("m1b: %d\n", m1b);
-      xH1 += m1b;
+      xH1 = xB + m1b*(y-yB);
     }
     else {
       m1t = (xT-xM)/(yT-yM);
       //printf("m1t: %d\n", m1t);
-      xH1 += m1t;
+      xH1 = xB + m1t*(y-yM);
     }
     draw_line( xH0, y, xH1, y, s, c );
     y++;
