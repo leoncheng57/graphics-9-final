@@ -69,6 +69,13 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 		 polygons->m[0][i],
 		 polygons->m[1][i],
 		 s, c);
+      scanline( polygons->m[0][i],
+		polygons->m[1][i],
+		polygons->m[0][i+1],
+		polygons->m[1][i+1],
+		polygons->m[0][i+2],
+		polygons->m[1][i+2],
+		s,  c);
     }
   }
 }
@@ -119,25 +126,29 @@ void scanline( int x0, int y0, int x1, int y1, int x2, int y2, screen s, color c
   yM = y1;
   xT = x2;
   yT = y2;
-  
+
   //Set y
   y = yB;
   
   //Set slopes for horizontal scanline conversion
-  m0 = (xT-xB)/(yT-yB);
-  m1b = (xM-xB)/(yM-yB);
-  m1t = (xT-xM)/(yT-yM);
   
   //Horizontal scanline conversion
-  while( y <= yT ) {
+  while( y < (int)yT ) {
    xH0 = xB + m0*(y-yB);
-   if ( y <= yM ){
-     xH1 = xB + m1b*(y-yB);
+   m0 = (yT-yB)/(xT-xB);
+   printf("m0: %d\n", m0);
+   printf("%d %d %d\n", yB, yM, yT);
+   if ( y < (int)yM ){
+     m1b = (yM-yB)/(xM-xB);
+     printf("m1b: %d\n", m1b);
+     xH1 = xB + (y-yB)/m1b;
      draw_line( xH0, y, xH1, y, s, c );
      y++;
     }
    else {
-     xH1 = xB + m1t*(y-yB);
+     printf("m1t: %d\n", m1t);
+     m1t = (yT-yM)/(xT-xM);
+     xH1 = xM + (y-yB)/m1t;
      draw_line( xH0, y, xH1, y, s, c );
      y++;
     }
