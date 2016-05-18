@@ -69,6 +69,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 		 polygons->m[0][i],
 		 polygons->m[1][i],
 		 s, c);
+		 printf("Scan Line <---------------------\n");
       scanline( polygons->m[0][i],
 		polygons->m[1][i],
 		polygons->m[0][i+1],
@@ -122,6 +123,19 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
     x2 = x1;
     x1 = st;
   }
+  
+  /*
+  if ( y0 == y1 ) {
+    if ( x0 < x1 ) {
+      st = x1;
+      x1 = x0;
+      x0 = st;
+      st = y1;
+      y1 = y0;
+      y0 = st;
+    }
+  }
+  */
   //Set Top Bottom Middle
   xB = x0;
   yB = y0;
@@ -139,19 +153,28 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
   while( y < (int)yT ) {
     m0 = (xT-xB)/(yT-yB);
     xH0 = xB + m0*(y-yB);
-    printf("m0: %f xT:%f xB:%f\n", m0, xT, xB);
+    printf("(%f %f) (%f %f) (%f %f)\n", xM, yM, xB, yB, xT, yT );
+    //printf("m0: %f xT:%f xB:%f\n", m0, xT, xB);
     //printf("%d,%d %d,%d %d,%d\n", xB, yB, xM, yM, xT, yT);
     if ( y < (int)yM ){
+      //printf("yM = %f yB = %f yT = %f\n", yM, yB, yT );
       m1b = (xM-xB)/(yM-yB);
-      //printf("m1b: %d\n", m1b);
+      //printf("m1b: %f\n", m1b);
       xH1 = xB + m1b*(y-yB);
+      printf("y < ym: m0:%f (%f,%d) m1b:%f (%f,%d)\n", m0, xH0, y, m1b, xH1, y);
     }
     else {
+      //printf("yM = %f yB = %f yT = %f\n", yM, yB, yT );
       m1t = (xT-xM)/(yT-yM);
-      //printf("m1t: %d\n", m1t);
-      xH1 = xB + m1t*(y-yM);
+      //printf("m1t: %f\n", m1t);
+      if ( m1t < 0 && xB < xM )
+        xH1 = xM + m1t*(y-yM);
+      else if ( m1t > 0 && xB > xM )
+        xH1 = xM + m1t*(y-yM);
+      else
+        xH1 = xB + m1t*(y-yM);
+      printf("y > ym m0:%f (%f,%d) m1t:%f (%f,%d)\n", m0, xH0, y, m1t, xH1, y);
     }
-    //printf("m0:%d (%d,%d) (%d,%d)\n", m0, xH0, y, xH1, y);
     draw_line( xH0, y, xH1, y, s, c );
     y++;
   }
