@@ -69,7 +69,15 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 		 polygons->m[0][i],
 		 polygons->m[1][i],
 		 s, c);
-		 printf("Scan Line <---------------------\n");
+      //printf("Scan Line <---------------------\n");
+      
+      c.green = ( c.green + 30 ) % 255;//changing the face color, random
+      //c.blue = ( c.blue + 30 ) % 255;//changing the face color, random
+      //c.red = ( c.red + 30 ) % 255;//changing the face color, random
+     
+      
+      //if (polygons->m[1][i] > polygons->m[1][i+1] )
+
       scanline( polygons->m[0][i],
 		polygons->m[1][i],
 		polygons->m[0][i+1],
@@ -97,7 +105,7 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
   double xB, yB, xT, yT, xM, yM, st;
   //Slopes
   double m0, m1b, m1t;
-  
+
   //Sort y0 y1 y2 from least to largest
   if ( y0 > y1 ) { //if y0 > y1 swap (x0,y0) (x1,y1)
     st = y1; //store the smaller value
@@ -123,7 +131,7 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
     x2 = x1;
     x1 = st;
   }
-  
+
   /*
   if ( y0 == y1 ) {
     if ( x0 < x1 ) {
@@ -135,7 +143,9 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
       y0 = st;
     }
   }
-  */
+  */  
+  
+
   //Set Top Bottom Middle
   xB = x0;
   yB = y0;
@@ -153,26 +163,37 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
   while( y < (int)yT ) {
     m0 = (xT-xB)/(yT-yB);
     xH0 = xB + m0*(y-yB);
-    printf("(%f %f) (%f %f) (%f %f)\n", xM, yM, xB, yB, xT, yT );
+    //printf("(%f %f) (%f %f) (%f %f)\n", xM, yM, xB, yB, xT, yT );
     //printf("m0: %f xT:%f xB:%f\n", m0, xT, xB);
     //printf("%d,%d %d,%d %d,%d\n", xB, yB, xM, yM, xT, yT);
-    if ( y < (int)yM ){
+    if ( y == (int)yM ) 
+      printf( "y == yM\n" );
+    else if ( y < (int)yM ){
       //printf("yM = %f yB = %f yT = %f\n", yM, yB, yT );
       m1b = (xM-xB)/(yM-yB);
+      if ( m1b > 1000.0 ) {
+	printf( "xM:%f xB:%f yM:%f yB:%f xT:%f yT:%f\n\n", xM, xB, yM, yB, xT, yT );
+      }
       //printf("m1b: %f\n", m1b);
-      xH1 = xB + m1b*(y-yB);
+      /* if ( m1b > 0 && xB > xM ) { */
+      /*   xH1 = xM + m1b*(y-yM); */
+      /* } */
+      else  
+	xH1 = xB + m1b*(y-yB);
       printf("y < ym: m0:%f (%f,%d) m1b:%f (%f,%d)\n", m0, xH0, y, m1b, xH1, y);
     }
     else {
       //printf("yM = %f yB = %f yT = %f\n", yM, yB, yT );
-      m1t = (xT-xM)/(yT-yM);
       //printf("m1t: %f\n", m1t);
-      if ( m1t < 0 && xB < xM )
-        xH1 = xM + m1t*(y-yM);
-      else if ( m1t > 0 && xB > xM )
-        xH1 = xM + m1t*(y-yM);
-      else
-        xH1 = xB + m1t*(y-yM);
+      m1t = (xT-xM)/(yT-yM);
+      /* if ( m1t < 0 && xB < xM ) { */
+      /*   xH1 = xM + m1t*(y-yM); */
+      /* } */
+      /* else if ( m1t > 0 && xB > xM ) { */
+      /*   xH1 = xM + m1t*(y-yM); */
+      /* } */
+      /* else */
+      xH1 = xM + m1t*(y-yM);
       printf("y > ym m0:%f (%f,%d) m1t:%f (%f,%d)\n", m0, xH0, y, m1t, xH1, y);
     }
     draw_line( xH0, y, xH1, y, s, c );
