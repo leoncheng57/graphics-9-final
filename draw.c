@@ -201,7 +201,7 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
       //m1b = (xM-xB)/(yM-yB);
       if ( y==(int)yB) {
 	      //printf( "xM:%f xB:%f yM:%f yB:%f xT:%f yT:%f\n\n", xM, xB, yM, yB, xT, yT );
-	      printf( "[m1b]y==yM\n" );
+	      printf( "[m1b]y==yB\n" );
 	      xH1 = xB;
       }
       //printf("m1b: %f\n", m1b);
