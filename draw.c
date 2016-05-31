@@ -199,10 +199,10 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
     else {
       //printf("yM = %f yB = %f yT = %f\n", yM, yB, yT );
       //m1b = (xM-xB)/(yM-yB);
-      if ( y==(int)yM ) {
+      if ( y==(int)yB) {
 	      //printf( "xM:%f xB:%f yM:%f yB:%f xT:%f yT:%f\n\n", xM, xB, yM, yB, xT, yT );
 	      printf( "[m1b]y==yM\n" );
-	      xH1 = xM;
+	      xH1 = xB;
       }
       //printf("m1b: %f\n", m1b);
       /* if ( m1b > 0 && xB > xM ) { */
