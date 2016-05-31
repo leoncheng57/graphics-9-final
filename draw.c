@@ -161,36 +161,31 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
   
   //Horizontal scanline conversion
   while( y < (int)yT ) {
-    m0 = (xT-xB)/(yT-yB);
-    xH0 = xB + m0*(y-yB);
+    if ( y==(int)yB ) {
+      printf( "[m0]y==yB\n" );
+      xH0 = xB;
+    }
+    else {
+      m0 = (xT-xB)/(yT-yB);
+      //printf( "%f\n", m0 );
+      xH0 = xB + m0*(y-yB);
+      //printf( "[m0]%f\n", m0 );
+    }
     //printf("(%f %f) (%f %f) (%f %f)\n", xM, yM, xB, yB, xT, yT );
     //printf("m0: %f xT:%f xB:%f\n", m0, xT, xB);
     //printf("%d,%d %d,%d %d,%d\n", xB, yB, xM, yM, xT, yT);
-    if ( y == (int)yM ) 
-      printf( "y == yM\n" );
-    else if ( y < (int)yM ){
-      //printf("yM = %f yB = %f yT = %f\n", yM, yB, yT );
-      //m1b = (xM-xB)/(yM-yB);
-      if ( yM==yB ) {
-	printf( "xM:%f xB:%f yM:%f yB:%f xT:%f yT:%f\n\n", xM, xB, yM, yB, xT, yT );
-      }
-      //printf("m1b: %f\n", m1b);
-      /* if ( m1b > 0 && xB > xM ) { */
-      /*   xH1 = xM + m1b*(y-yM); */
-      /* } */
-      else {  
-	xH1 = xB + m1b*(y-yB);
-	m1b = (xM-xB)/(yM-yB);
-      }
-      printf("y < ym: m0:%f (%f,%d) m1b:%f (%f,%d)\n", m0, xH0, y, m1b, xH1, y);
-    }
-    else {
+    //if ( y == (int)yM ) 
+    //  printf( "y == yM\n" );
+    if ( y >= (int)yM ) {
       //printf("yM = %f yB = %f yT = %f\n", yM, yB, yT );
       //printf("m1t: %f\n", m1t);
-      if (yT==yM) 
-	printf("yT==yM\n");
+      if (y==(int)yM) {
+	      printf("[m1t]yT==yM\n");
+	      xH1 = xM;
+      }
       else {
-	m1t = (xT-xM)/(yT-yM);
+	      m1t = (xT-xM)/(yT-yM);
+	      //printf( "%f, %f, %f\n", m1t, yT, yM );
       /* if ( m1t < 0 && xB < xM ) { */
       /*   xH1 = xM + m1t*(y-yM); */
       /* } */
@@ -198,9 +193,28 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
       /*   xH1 = xM + m1t*(y-yM); */
       /* } */
       /* else */
-	xH1 = xM + m1t*(y-yM);
+	     xH1 = xM + m1t*(y-yM);
       }
-      printf("y > ym m0:%f (%f,%d) m1t:%f (%f,%d)\n", m0, xH0, y, m1t, xH1, y);
+    }
+    else {
+      //printf("yM = %f yB = %f yT = %f\n", yM, yB, yT );
+      //m1b = (xM-xB)/(yM-yB);
+      if ( y==(int)yM ) {
+	      //printf( "xM:%f xB:%f yM:%f yB:%f xT:%f yT:%f\n\n", xM, xB, yM, yB, xT, yT );
+	      printf( "[m1b]y==yM\n" );
+	      xH1 = xM;
+      }
+      //printf("m1b: %f\n", m1b);
+      /* if ( m1b > 0 && xB > xM ) { */
+      /*   xH1 = xM + m1b*(y-yM); */
+      /* } */
+      else {  
+        //printf( "%f %f\n", yM, yB );
+        m1b = (xM-xB)/(yM-yB);
+	      xH1 = xB + m1b*(y-yB);
+      }
+      //printf("y < ym: m0:%f (%f,%d) m1b:%f (%f,%d)\n", m0, xH0, y, m1b, xH1, y);
+      //printf("y > ym m0:%f (%f,%d) m1t:%f (%f,%d)\n", m0, xH0, y, m1t, xH1, y);
     }
     draw_line( xH0, y, xH1, y, s, c );
     y++;
