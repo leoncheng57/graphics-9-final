@@ -54,6 +54,12 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
   for( i=0; i < polygons->lastcol-2; i+=3 ) {
 
     if ( calculate_dot( polygons, i ) < 0 ) {
+
+      c.green = ( c.green + 30 ) % 255;//changing the face color, random
+      //c.blue = ( c.blue + 30 ) % 255;//changing the face color, random
+      //c.red = ( c.red + 30 ) % 255;//changing the face color, random
+     
+
       draw_line( polygons->m[0][i],
 		 polygons->m[1][i],
 		 polygons->m[0][i+1],
@@ -71,10 +77,6 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 		 s, c);
       //printf("Scan Line <---------------------\n");
       
-      c.green = ( c.green + 30 ) % 255;//changing the face color, random
-      //c.blue = ( c.blue + 30 ) % 255;//changing the face color, random
-      //c.red = ( c.red + 30 ) % 255;//changing the face color, random
-     
       
       //if (polygons->m[1][i] > polygons->m[1][i+1] )
 
