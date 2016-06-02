@@ -162,7 +162,7 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
   //Horizontal scanline conversion
   while( y < (int)yT ) {
     if ( y==(int)yB ) {
-      printf( "[m0]y==yB\n" );
+      //printf( "[m0]y==yB\n" );
       xH0 = xB;
     }
     else {
@@ -180,7 +180,7 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
       //printf("yM = %f yB = %f yT = %f\n", yM, yB, yT );
       //printf("m1t: %f\n", m1t);
       if (y==(int)yM) {
-	      printf("[m1t]yT==yM\n");
+	//printf("[m1t]yT==yM\n");
 	      xH1 = xM;
       }
       else {
@@ -201,7 +201,7 @@ void scanline( double x0, double y0, double x1, double y1, double x2, double y2,
       //m1b = (xM-xB)/(yM-yB);
       if ( y==(int)yB) {
 	      //printf( "xM:%f xB:%f yM:%f yB:%f xT:%f yT:%f\n\n", xM, xB, yM, yB, xT, yT );
-	      printf( "[m1b]y==yB\n" );
+	//printf( "[m1b]y==yB\n" );
 	      xH1 = xB;
       }
       //printf("m1b: %f\n", m1b);

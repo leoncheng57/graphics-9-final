@@ -159,6 +159,7 @@ void save_extension( screen s, char *file) {
     fprintf(f, "\n");
   }
   pclose(f);
+  printf("file made %s \n", file);
 }
 
 
