@@ -48,7 +48,7 @@ void add_polygon( struct matrix *polygons,
   04/16/13 13:13:27
   jdyrlandweaver
   ====================*/
-void draw_polygons( struct matrix *polygons, screen s, color c, double **zb) {
+void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *zb) {
   
   int i;  
   for( i=0; i < polygons->lastcol-2; i+=3 ) {
@@ -103,11 +103,11 @@ void draw_polygons( struct matrix *polygons, screen s, color c, double **zb) {
 }
 
 /* WATCHOUT: SCANLINE CONVERSION HAPPENING BELOW  y-y1=m(x-x1) -> */
-void scanline( double x0, double y0, double z0,  double x1, double y1, double z1, double x2, double y2, double z2, screen s, color c, double **zb){
+void scanline( double x0, double y0, double z0,  double x1, double y1, double z1, double x2, double y2, double z2, screen s, color c, struct matrix *zb){
   
   //Horizontal vars
   int y;
-  double xH0, xH1;
+  double xH0, xH1, zH0, zH1;
   /* TBD 
   //Vertical vars
   int x, yH0, yH1;
@@ -175,11 +175,13 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
     if ( y==(int)yB ) {
       //printf( "[m0]y==yB\n" );
       xH0 = xB;
+      zH0 = z0;
     }
     else {
       m0 = (xT-xB)/(yT-yB);
       //printf( "%f\n", m0 );
       xH0 = xB + m0*(y-yB);
+      zH0 = z0 + m0*(y-yB);
       //printf( "[m0]%f\n", m0 );
     }
     //printf("(%f %f) (%f %f) (%f %f)\n", xM, yM, xB, yB, xT, yT );
@@ -193,6 +195,7 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
       if (y==(int)yM) {
 	//printf("[m1t]yT==yM\n");
 	      xH1 = xM;
+	      zH1 = z1;
       }
       else {
 	      m1t = (xT-xM)/(yT-yM);
@@ -205,6 +208,7 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
       /* } */
       /* else */
 	     xH1 = xM + m1t*(y-yM);
+	     zH1 = z1 + m1t*(y-yM);
       }
     }
     else {
@@ -214,6 +218,7 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
 	      //printf( "xM:%f xB:%f yM:%f yB:%f xT:%f yT:%f\n\n", xM, xB, yM, yB, xT, yT );
 	//printf( "[m1b]y==yB\n" );
 	      xH1 = xB;
+	      zH1 = z0;
       }
       //printf("m1b: %f\n", m1b);
       /* if ( m1b > 0 && xB > xM ) { */
@@ -222,12 +227,13 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
       else {  
         //printf( "%f %f\n", yM, yB );
         m1b = (xM-xB)/(yM-yB);
-	      xH1 = xB + m1b*(y-yB);
+	xH1 = xB + m1b*(y-yB);
+	zH1 = z0 + m1b*(y-yB);
       }
       //printf("y < ym: m0:%f (%f,%d) m1b:%f (%f,%d)\n", m0, xH0, y, m1b, xH1, y);
       //printf("y > ym m0:%f (%f,%d) m1t:%f (%f,%d)\n", m0, xH0, y, m1t, xH1, y);
     }
-    draw_line( xH0, y, xH1, y, s, c );
+    draw_line( xH0, y, zH0, xH1, y, zH1, s, c, zb );
     y++;
   }
 }
@@ -752,7 +758,7 @@ void add_edge( struct matrix * points,
 /* } */
 
 
-void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, double **zb) {
+void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix *zb) {
  
   int x, y, d, dx, dy;
   double z;

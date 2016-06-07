@@ -61,6 +61,7 @@
 #include "display.h"
 #include "draw.h"
 #include "stack.h"
+#include "float.h"
 
 /*======== void first_pass()) ==========
   Inputs:   
@@ -351,8 +352,15 @@ void my_main( int polygons ) {
   double step;
   double xval, yval, zval, knob_value;
   screen t;
-  double **zb;
   color g;
+
+  struct matrix *zb = new_matrix( XRES, YRES );
+  int phineas, pherb;
+  for ( phineas = 0; phineas < XRES; phineas++ ) {
+    for ( pherb = 0; pherb < YRES; pherb++ ) {
+      zb->m[phineas][pherb] = -DBL_MAX;
+    }
+  } 
 
   struct vary_node **knobs;
   struct vary_node *vn;

@@ -75,14 +75,14 @@ pixel 0, 0 located at the lower left corner of the screen
 02/12/10 09:09:00
 jdyrlandweaver
 ====================*/
-void plot( screen s, color c, int x, int y, double z, double **zb ) {
+void plot( screen s, color c, int x, int y, double z, struct matrix *zb ) {
   int newy = YRES - 1 - y;
   //Look through zb for z using (x,y) 
-  //if ( zb[x][newy] < z )  {
-  //zb[x][newy] == z;
-  if ( x >= 0 && x < XRES && newy >=0 && newy < YRES )
-    s[x][newy] = c;
-    //}
+  if ( zb->m[x][newy] < z )  {
+    zb->m[x][newy] == z;
+    if ( x >= 0 && x < XRES && newy >=0 && newy < YRES )
+      s[x][newy] = c;
+    }
 }
 
 /*======== void clear_screen() ==========
