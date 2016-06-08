@@ -125,6 +125,9 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
     st = x1;
     x1 = x0;
     x0 = st;
+    st = z1;
+    z1 = z0;
+    z0 = st;
   }
   if ( y0 > y2 ) { //if y0 > y2 swap (x0,y0) (x2,y2)
     st = y2; //store the smaller value
@@ -133,6 +136,9 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
     st = x2;
     x2 = x0;
     x0 = st;
+    st = z2;
+    z2 = z0;
+    z0 = st;
   }
   if ( y1 > y2 ) { //if y1 > y2 swap (x1,y1) (x2,y2)
     st = y2; //store the smaller value;
@@ -141,6 +147,9 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
     st = x2;
     x2 = x1;
     x1 = st;
+    st = z2;
+    z2 = z1;
+    z1 = st;
   }
 
   /*
@@ -771,6 +780,7 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
     x = x1;
     y = y1;
     x1 = x0;
+    x0 = x;
     y1 = y0;
   }
 
