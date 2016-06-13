@@ -80,7 +80,7 @@ void plot( screen s, color c, int x, int y, double z, struct matrix *zb ) {
   //Look through zb for z using (x,y)
   if ( zb->m[x][newy] < z )  {
     if ( x >= 0 && x < XRES && newy >=0 && newy < YRES )
-      zb->m[x][newy] = z;
+      /* zb->m[x][newy] = z; */
       s[x][newy] = c;
     }
 }
