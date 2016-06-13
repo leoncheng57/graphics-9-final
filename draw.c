@@ -58,7 +58,9 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
       c.green = ( c.green + 30 ) % 255;//changing the face color, random
       //c.blue = ( c.blue + 30 ) % 255;//changing the face color, random
       //c.red = ( c.red + 30 ) % 255;//changing the face color, random
-
+			// c.green = 255;
+			// c.blue = 255;
+			// c.red = 0;
 
       draw_line( polygons->m[0][i],
 		 polygons->m[1][i],
@@ -190,6 +192,7 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
       m0 = (xT-xB)/(yT-yB);
       //printf( "%f\n", m0 );
       xH0 = xB + m0*(y-yB);
+			m0 = (z2-z0)/(yT-yB);
       zH0 = z0 + m0*(y-yB);
       //printf( "[m0]%f\n", m0 );
     }
@@ -217,6 +220,7 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
       /* } */
       /* else */
 	     xH1 = xM + m1t*(y-yM);
+			 m1t = (z2-z1)/(yT-yB);
 	     zH1 = z1 + m1t*(y-yM);
       }
     }
@@ -237,6 +241,7 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
         //printf( "%f %f\n", yM, yB );
         m1b = (xM-xB)/(yM-yB);
 	xH1 = xB + m1b*(y-yB);
+		m1b = (z1-z0)/(yM-yB);
 	zH1 = z0 + m1b*(y-yB);
       }
       //printf("y < ym: m0:%f (%f,%d) m1b:%f (%f,%d)\n", m0, xH0, y, m1b, xH1, y);
@@ -783,6 +788,9 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
     x1 = x0;
     x0 = x;
     y1 = y0;
+		z = z1;
+		z1 = z0;
+		z0 = z;
   }
 
   //need to know dx and dy for this version
@@ -798,7 +806,7 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 
       while ( x <= x1 ) {
 
-	z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );
+	//z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );
 	//z = (z0-z1) / dx;
 	//z = (z0-z1) / (dx*dx + dy*dy);
 	//z = (z0-z1) * ( (x-x0) / (x1-x0) );
@@ -816,6 +824,7 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 	  y = y + 1;
 	  d = d + dy - dx;
 	}
+	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
       }
     }
 
@@ -824,7 +833,7 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
       d = ( dy / 2 ) - dx;
       while ( y <= y1 ) {
 
-	z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );
+	//z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );
 	//z = (z0-z1) / dx;
 	//z = (z0-z1) / (dx*dx + dy*dy);
 	//if (y1-y0 != 0)
@@ -841,6 +850,7 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 	  x = x + 1;
 	  d = d + dy - dx;
 	}
+	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
       }
     }
   }
@@ -855,11 +865,11 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 
       while ( x <= x1 ) {
 
-	z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );
+	//z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );
 	//z = (z0-z1) / dx;
 	//z = (z0-z1) / (dx*dx + dy*dy);
 	//if (x1-x0 != 0)
-	//	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+	//	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
 	//z = (z0-z1) * ( (x-x0) / (x1-x0) );
 
 	plot(s, c, x, y, z, zb);
@@ -873,6 +883,7 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 	  y = y - 1;
 	  d = d + dy + dx;
 	}
+	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
       }
     }
 
@@ -900,6 +911,7 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 	  x = x + 1;
 	  d = d + dy + dx;
 	}
+	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
       }
     }
   }

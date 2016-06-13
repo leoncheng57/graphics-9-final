@@ -367,7 +367,7 @@ void my_main( int polygons ) {
   char frame_name[128];
   num_frames = 1;
   first_pass();
-  step = 5;
+  step = 1;
   if (num_frames > 1){
     knobs=second_pass();
   }
