@@ -4,7 +4,7 @@
   to get a working mdl project (for now).
 
   my_main.c will serve as the interpreter for mdl.
-  When an mdl script goes through a lexer and parser, 
+  When an mdl script goes through a lexer and parser,
   the resulting operations will be in the array op[].
 
   Your job is to go through each entry in op and perform
@@ -18,32 +18,32 @@
   over a specified interval
 
   set: set a knob to a given value
-  
+
   setknobs: set all knobs to a given value
 
   push: push a new origin matrix onto the origin stack
-  
+
   pop: remove the top matrix on the origin stack
 
-  move/scale/rotate: create a transformation matrix 
-  based on the provided values, then 
+  move/scale/rotate: create a transformation matrix
+  based on the provided values, then
   multiply the current top of the
   origins stack by it.
 
   box/sphere/torus: create a solid object based on the
-  provided values. Store that in a 
+  provided values. Store that in a
   temporary matrix, multiply it by the
   current top of the origins stack, then
   call draw_polygons.
 
-  line: create a line based on the provided values. Store 
+  line: create a line based on the provided values. Store
   that in a temporary matrix, multiply it by the
   current top of the origins stack, then call draw_lines.
 
   save: call save_extension with the provided filename
 
   display: view the image live
-  
+
   jdyrlandweaver
   =========================*/
 
@@ -64,18 +64,18 @@
 #include "float.h"
 
 /*======== void first_pass()) ==========
-  Inputs:   
-  Returns: 
+  Inputs:
+  Returns:
 
   Checks the op array for any animation commands
   (frames, basename, vary)
-  
-  Should set num_frames and basename if the frames 
+
+  Should set num_frames and basename if the frames
   or basename commands are present
 
   If vary is found, but frames is not, the entire
   program should exit.
-  
+
   If frames is found, but basename is not, set name
   to some default value, and print out a message
   with the name being used.
@@ -112,7 +112,7 @@ void first_pass() {
 }
 
 /*======== struct vary_node ** second_pass()) ==========
-  Inputs:   
+  Inputs:
   Returns: An array of vary_node linked lists
 
   In order to set the knobs for animation, we need to keep
@@ -125,10 +125,10 @@ void first_pass() {
   node contains a knob name, a value, and a pointer to the
   next node.
 
-  Go through the opcode array, and when you find vary, go 
+  Go through the opcode array, and when you find vary, go
   from knobs[0] to knobs[frames-1] and add (or modify) the
   vary_node corresponding to the given knob with the
-  appropirate value. 
+  appropirate value.
 
   05/17/12 09:29:31
   jdyrlandweaver
@@ -136,24 +136,24 @@ void first_pass() {
 struct vary_node ** second_pass() {
   struct vary_node ** knobs;
   knobs = (struct vary_node **)malloc( num_frames * sizeof(struct vary_node *));
-  
+
   int i,j;
   for(i = 0; i < num_frames; i++){
     knobs[i]=(struct vary_node *) NULL;
   }
-  
+
   for(i = 0; i < lastop; i++) {
     switch (op[i].opcode){
     case VARY:
       for(j = 0;j<num_frames;j++){
-	  
+
 	//set up node to be added
 	struct vary_node *new;
 	new = (struct vary_node *) malloc (sizeof (struct vary_node));
 
 	strcpy( new->name , op[i].op.vary.p->name );
 	new->next = (struct vary_node*) NULL;
-	  
+
 	int start_f = op[i].op.vary.start_frame;
 	int end_f = op[i].op.vary.end_frame;
 	double start_v = op[i].op.vary.start_val;
@@ -162,7 +162,7 @@ struct vary_node ** second_pass() {
 	//set value depending on frame j
 	if(( j >= start_f && j <= end_f )){
 	  new->value = (end_v-start_v) * (j-start_f) / (end_f-start_f) + start_v;
-	  
+
 	  //see where this node fits
 	  if( !knobs[j] || strcmp(knobs[j]->name , new->name) == 0){
 	    if( knobs[j] ) {
@@ -194,13 +194,13 @@ struct vary_node ** second_pass() {
 	  placeholder = (struct vary_node *) malloc (sizeof(struct vary_node));
 	  strcpy(placeholder->name, new->name);
 	  placeholder->value = 99999999;
-	    
+
 	  if(!knobs[j] || strcmp(knobs[j]->name , placeholder->name) == 0){
 	    if(!knobs[j])
 	      knobs[j] = placeholder;
 	  }
 	  else{
-	    
+
 	    struct vary_node *curr;
 	    curr = knobs[j];
 	    while(curr){
@@ -213,7 +213,7 @@ struct vary_node ** second_pass() {
 	      else
 		curr = curr->next;
 	    }
-	    
+
 	  }
 	}
       }
@@ -246,7 +246,7 @@ struct vary_node ** second_pass() {
 	curr->value = tmp;
       }
     }
-    
+
     tmp = 99999999;
     for(i = num_frames-1; i >=0; i--){
       struct vary_node *curr;
@@ -285,14 +285,14 @@ struct vary_node ** second_pass() {
 }
 
 /*======== void print_knobs() ==========
-  Inputs:   
-  Returns: 
+  Inputs:
+  Returns:
   Goes through symtab and display all the knobs and their
   currnt values}
 
   /*======== void print_knobs() ==========
-  Inputs:   
-  Returns: 
+  Inputs:
+  Returns:
 
   Goes through symtab and display all the knobs and their
   currnt values
@@ -300,7 +300,7 @@ struct vary_node ** second_pass() {
   jdyrlandweaver
   ====================*/
 void print_knobs() {
-  
+
   int i;
 
   printf( "ID\tNAME\t\tTYPE\t\tVALUE\n" );
@@ -318,12 +318,12 @@ void print_knobs() {
 
 /*======== void my_main() ==========
   Inputs:
-  Returns: 
+  Returns:
 
   This is the main engine of the interpreter, it should
   handle most of the commadns in mdl.
 
-  If frames is not present in the source (and therefore 
+  If frames is not present in the source (and therefore
   num_frames is 1, then process_knobs should be called.
 
   If frames is present, the enitre op array must be
@@ -333,11 +333,11 @@ void print_knobs() {
   files will be listed in order, then clear the screen and
   reset any other data structures that need it.
 
-  Important note: you cannot just name your files in 
+  Important note: you cannot just name your files in
   regular sequence, like pic0, pic1, pic2, pic3... if that
   is done, then pic1, pic10, pic11... will come before pic2
   and so on. In order to keep things clear, add leading 0s
-  to the numeric portion of the name. If you use sprintf, 
+  to the numeric portion of the name. If you use sprintf,
   you can use "%0xd" for this purpose. It will add at most
   x 0s in front of a number, if needed, so if used correctly,
   and x = 4, you would get numbers like 0001, 0002, 0011,
@@ -360,7 +360,7 @@ void my_main( int polygons ) {
     for ( pherb = 0; pherb < YRES; pherb++ ) {
       zb->m[phineas][pherb] = -DBL_MAX;
     }
-  } 
+  }
 
   struct vary_node **knobs;
   struct vary_node *vn;
@@ -371,7 +371,7 @@ void my_main( int polygons ) {
   if (num_frames > 1){
     knobs=second_pass();
   }
- 
+
   g.red = 0;
   g.green = 255;
   g.blue = 255;
@@ -441,8 +441,8 @@ void my_main( int polygons ) {
       yval =  op[i].op.move.d[1];
       zval = op[i].op.move.d[2];
 
-      while ( knobs 
-	      && num_frames > 1 
+      while ( knobs
+	      && num_frames > 1
 	      && vn
 	      && op[i].op.move.p
 	      && strcmp (vn->name, op[i].op.move.p->name)
@@ -455,7 +455,7 @@ void my_main( int polygons ) {
       xval *= knob_value;
       yval *= knob_value;
       zval *= knob_value;
-      
+
       transform = make_translate( xval, yval, zval );
       //multiply by the existing origin
       matrix_mult( s->data[ s->top ], transform );
@@ -470,8 +470,8 @@ void my_main( int polygons ) {
       zval = op[i].op.scale.d[2];
 
 
-      while ( knobs 
-	      && num_frames > 1 
+      while ( knobs
+	      && num_frames > 1
 	      && vn
 	      && op[i].op.scale.p
 	      && strcmp (vn->name, op[i].op.scale.p->name)
@@ -486,7 +486,7 @@ void my_main( int polygons ) {
       zval *= knob_value;
 
 
-      
+
       transform = make_scale( xval, yval, zval );
       matrix_mult( s->data[ s->top ], transform );
       //put the new matrix on the top
@@ -496,8 +496,8 @@ void my_main( int polygons ) {
 
     case ROTATE:
 
-      while ( knobs 
-	      && num_frames > 1 
+      while ( knobs
+	      && num_frames > 1
 	      && vn
 	      && op[i].op.rotate.p
 	      && strcmp (vn->name, op[i].op.rotate.p->name)
@@ -513,11 +513,11 @@ void my_main( int polygons ) {
 	* knob_value;
 
       //get the axis
-      if ( op[i].op.rotate.axis == 0 ) 
+      if ( op[i].op.rotate.axis == 0 )
 	transform = make_rotX( xval );
-      else if ( op[i].op.rotate.axis == 1 ) 
+      else if ( op[i].op.rotate.axis == 1 )
 	transform = make_rotY( xval );
-      else if ( op[i].op.rotate.axis == 2 ) 
+      else if ( op[i].op.rotate.axis == 2 )
 	transform = make_rotZ( xval );
 
       matrix_mult( s->data[ s->top ], transform );
@@ -540,16 +540,16 @@ void my_main( int polygons ) {
       break;
     }
   }
-    
+
   /* 	//My Code so far: BEGIN */
   /* case FRAMES: */
   /* 	op[i].op.frames.num_frames; */
   /* 	break; */
-    
+
   /* case BASENAME: */
   /* 	op[i].op.basename.p->name; */
   /* 	break; */
-    
+
   /* case VARY: */
   /* 	printf("Vary: %4.0f %4.0f, %4.0f %4.0f", */
   /* 	       op[i].op.vary.start_frame, */
@@ -559,8 +559,8 @@ void my_main( int polygons ) {
   /* 	SYMTAB->s->m */
   /* 	break; */
   /* 	//My Code so far: END */
-    
-    
+
+
   free_stack( s );
   free_matrix( tmp );
 
@@ -569,4 +569,14 @@ void my_main( int polygons ) {
   clear_screen(t);
   //free_matrix( transform );
   }
+
+  //int phineas, pherb;
+  // for(phineas = 0; i < XRES; phineas++) {
+  //   for(pherb = 0; j < YRES; pherb++) {
+  //     if ( zb->m[phineas][pherb] > -DBL_MAX )
+  // 	printf("%lf ", zb->m[phineas][pherb]);
+  //   }
+  //   printf("\n");
+  // }
+
 }

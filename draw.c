@@ -18,8 +18,8 @@
   double z1
   double x2
   double y2
-  double z2  
-  Returns: 
+  double z2
+  Returns:
   Adds the vertices (x0, y0, z0), (x1, y1, z1)
   and (x2, y2, z2) to the polygon matrix. They
   define a single triangle surface.
@@ -27,9 +27,9 @@
   04/16/13 13:05:59
   jdyrlandweaver
   ====================*/
-void add_polygon( struct matrix *polygons, 
-		  double x0, double y0, double z0, 
-		  double x1, double y1, double z1, 
+void add_polygon( struct matrix *polygons,
+		  double x0, double y0, double z0,
+		  double x1, double y1, double z1,
 		  double x2, double y2, double z2 ) {
   add_point(polygons, x0, y0, z0);
   add_point(polygons, x1, y1, z1);
@@ -39,9 +39,9 @@ void add_polygon( struct matrix *polygons,
 /*======== void draw_polygons() ==========
   Inputs:   struct matrix *polygons
   screen s
-  color c  
-  Returns: 
-  Goes through polygons 3 points at a time, drawing 
+  color c
+  Returns:
+  Goes through polygons 3 points at a time, drawing
   lines connecting each points to create bounding
   triangles
 
@@ -49,8 +49,8 @@ void add_polygon( struct matrix *polygons,
   jdyrlandweaver
   ====================*/
 void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *zb) {
-  
-  int i;  
+
+  int i;
   for( i=0; i < polygons->lastcol-2; i+=3 ) {
 
     if ( calculate_dot( polygons, i ) < 0 ) {
@@ -58,7 +58,7 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
       c.green = ( c.green + 30 ) % 255;//changing the face color, random
       //c.blue = ( c.blue + 30 ) % 255;//changing the face color, random
       //c.red = ( c.red + 30 ) % 255;//changing the face color, random
-     
+
 
       draw_line( polygons->m[0][i],
 		 polygons->m[1][i],
@@ -82,21 +82,21 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
 		 polygons->m[2][i],
 		 s, c, zb);
       //printf("Scan Line <---------------------\n");
-      
-      
+
+
       //if (polygons->m[1][i] > polygons->m[1][i+1] )
 
       scanline( polygons->m[0][i],
-		polygons->m[1][i],
-		polygons->m[2][i],
-		polygons->m[0][i+1],
-		polygons->m[1][i+1],
-		polygons->m[2][i+1],
-		polygons->m[0][i+2],
-		polygons->m[1][i+2],
-		polygons->m[2][i+2],
-		s,  c, zb);
-    
+      		polygons->m[1][i],
+      		polygons->m[2][i],
+      		polygons->m[0][i+1],
+      		polygons->m[1][i+1],
+      		polygons->m[2][i+1],
+      		polygons->m[0][i+2],
+      		polygons->m[1][i+2],
+      		polygons->m[2][i+2],
+      		s,  c, zb);
+
     }
 
   }
@@ -104,15 +104,15 @@ void draw_polygons( struct matrix *polygons, screen s, color c, struct matrix *z
 
 /* WATCHOUT: SCANLINE CONVERSION HAPPENING BELOW  y-y1=m(x-x1) -> */
 void scanline( double x0, double y0, double z0,  double x1, double y1, double z1, double x2, double y2, double z2, screen s, color c, struct matrix *zb){
-  
+
   //Horizontal vars
   int y;
   double xH0, xH1, zH0, zH1;
-  /* TBD 
+  /* TBD
   //Vertical vars
   int x, yH0, yH1;
   */
-  //Bottom top middle stored 
+  //Bottom top middle stored
   double xB, yB, xT, yT, xM, yM, st;
   //Slopes
   double m0, m1b, m1t;
@@ -163,8 +163,8 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
       y0 = st;
     }
   }
-  */  
-  
+  */
+
 
   //Set Top Bottom Middle
   xB = x0;
@@ -176,9 +176,9 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
 
   //Set y
   y = yB;
-  
+
   //Set slopes for horizontal scanline conversion
-  
+
   //Horizontal scanline conversion
   while( y < (int)yT ) {
     if ( y==(int)yB ) {
@@ -196,7 +196,7 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
     //printf("(%f %f) (%f %f) (%f %f)\n", xM, yM, xB, yB, xT, yT );
     //printf("m0: %f xT:%f xB:%f\n", m0, xT, xB);
     //printf("%d,%d %d,%d %d,%d\n", xB, yB, xM, yM, xT, yT);
-    //if ( y == (int)yM ) 
+    //if ( y == (int)yM )
     //  printf( "y == yM\n" );
     if ( y >= (int)yM ) {
       //printf("yM = %f yB = %f yT = %f\n", yM, yB, yT );
@@ -233,7 +233,7 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
       /* if ( m1b > 0 && xB > xM ) { */
       /*   xH1 = xM + m1b*(y-yM); */
       /* } */
-      else {  
+      else {
         //printf( "%f %f\n", yM, yB );
         m1b = (xM-xB)/(yM-yB);
 	xH1 = xB + m1b*(y-yB);
@@ -253,10 +253,10 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
   double cx
   double cy
   double r
-  double step  
-  Returns: 
+  double step
+  Returns:
 
-  adds all the points for a sphere with center 
+  adds all the points for a sphere with center
   (cx, cy) and radius r.
 
   should call generate_sphere to create the
@@ -264,8 +264,8 @@ void scanline( double x0, double y0, double z0,  double x1, double y1, double z1
 
   jdyrlandweaver
   ====================*/
-void add_sphere( struct matrix * points, 
-		 double cx, double cy, double cz, double r, 
+void add_sphere( struct matrix * points,
+		 double cx, double cy, double cz, double r,
 		 int step ) {
 
   struct matrix * temp;
@@ -278,7 +278,7 @@ void add_sphere( struct matrix * points,
 
   num_steps = MAX_STEPS / step;
   num_points = num_steps * (num_steps + 1);
-  
+
   temp = new_matrix( 4, num_points);
   //generate the points on the sphere
   generate_sphere( temp, cx, cy, cz, r, step );
@@ -293,13 +293,13 @@ void add_sphere( struct matrix * points,
 
   for ( lat = latStart; lat < latStop; lat++ ) {
     for ( longt = longStart; longt < longStop; longt++ ) {
-      
+
       index = lat * num_steps + longt;
 
       px0 = temp->m[0][ index ];
       py0 = temp->m[1][ index ];
       pz0 = temp->m[2][ index ];
-      
+
       px1 = temp->m[0][ (index + num_steps) % num_points ];
       py1 = temp->m[1][ (index + num_steps) % num_points ];
       pz1 = temp->m[2][ (index + num_steps) % num_points ];
@@ -332,10 +332,10 @@ void add_sphere( struct matrix * points,
   double cx
   double cy
   double r
-  double step  
-  Returns: 
+  double step
+  Returns:
 
-  Generates all the points along the surface of a 
+  Generates all the points along the surface of a
   sphere with center (cx, cy) and radius r
 
   Adds these points to the matrix parameter
@@ -343,8 +343,8 @@ void add_sphere( struct matrix * points,
   03/22/12 11:30:26
   jdyrlandweaver
   ====================*/
-void generate_sphere( struct matrix * points, 
-		      double cx, double cy, double cz, double r, 
+void generate_sphere( struct matrix * points,
+		      double cx, double cy, double cz, double r,
 		      int step ) {
 
 
@@ -355,7 +355,7 @@ void generate_sphere( struct matrix * points,
   int rotStop = MAX_STEPS;
   int circStart = step * 0;
   int circStop = MAX_STEPS;
-  
+
   for ( rotation = rotStart; rotation < rotStop; rotation += step ) {
     rot = (double)rotation / MAX_STEPS;
     for ( circle = circStart; circle <= circStop; circle+= step ) {
@@ -370,7 +370,7 @@ void generate_sphere( struct matrix * points,
       add_point( points, x, y, z);
     }
   }
-}    
+}
 
 
 /*======== void add_torus() ==========
@@ -379,8 +379,8 @@ void generate_sphere( struct matrix * points,
   double cy
   double r1
   double r2
-  double step  
-  Returns: 
+  double step
+  Returns:
 
   adds all the points required to make a torus
   with center (cx, cy) and radii r1 and r2.
@@ -391,15 +391,15 @@ void generate_sphere( struct matrix * points,
   03/22/12 13:34:03
   jdyrlandweaver
   ====================*/
-void add_torus( struct matrix * points, 
-		double cx, double cy, double cz, double r1, double r2, 
+void add_torus( struct matrix * points,
+		double cx, double cy, double cz, double r1, double r2,
 		int step ) {
 
   struct matrix * temp;
   int lat, longt;
   int index;
   int num_steps;
-  
+
   num_steps = MAX_STEPS / step;
 
   temp = new_matrix( 4, num_steps * num_steps );
@@ -466,10 +466,10 @@ void add_torus( struct matrix * points,
   double cx
   double cy
   double r
-  double step  
-  Returns: 
+  double step
+  Returns:
 
-  Generates all the points along the surface of a 
+  Generates all the points along the surface of a
   tarus with center (cx, cy) and radii r1 and r2
 
   Adds these points to the matrix parameter
@@ -477,8 +477,8 @@ void add_torus( struct matrix * points,
   03/22/12 11:30:26
   jdyrlandweaver
   ====================*/
-void generate_torus( struct matrix * points, 
-		     double cx, double cy, double cz, double r1, double r2, 
+void generate_torus( struct matrix * points,
+		     double cx, double cy, double cz, double r1, double r2,
 		     int step ) {
 
   double x, y, z, circ, rot;
@@ -514,10 +514,10 @@ void generate_torus( struct matrix * points,
   double width
   double height
   double depth
-  Returns: 
+  Returns:
 
-  add the points for a rectagular prism whose 
-  upper-left corner is (x, y, z) with width, 
+  add the points for a rectagular prism whose
+  upper-left corner is (x, y, z) with width,
   height and depth dimensions.
 
   jdyrlandweaver
@@ -531,87 +531,87 @@ void add_box( struct matrix * polygons,
   y2 = y - height;
   z2 = z - depth;
   //front
-  add_polygon( polygons, 
-	       x, y, z, 
+  add_polygon( polygons,
+	       x, y, z,
 	       x, y2, z,
 	       x2, y2, z);
-  add_polygon( polygons, 
-	       x2, y2, z, 
+  add_polygon( polygons,
+	       x2, y2, z,
 	       x2, y, z,
 	       x, y, z);
   //back
-  add_polygon( polygons, 
-	       x2, y, z2, 
+  add_polygon( polygons,
+	       x2, y, z2,
 	       x2, y2, z2,
 	       x, y2, z2);
-  add_polygon( polygons, 
-	       x, y2, z2, 
+  add_polygon( polygons,
+	       x, y2, z2,
 	       x, y, z2,
 	       x2, y, z2);
   //top
-  add_polygon( polygons, 
-	       x, y, z2, 
+  add_polygon( polygons,
+	       x, y, z2,
 	       x, y, z,
 	       x2, y, z);
-  add_polygon( polygons, 
-	       x2, y, z, 
+  add_polygon( polygons,
+	       x2, y, z,
 	       x2, y, z2,
 	       x, y, z2);
   //bottom
-  add_polygon( polygons, 
-	       x2, y2, z2, 
+  add_polygon( polygons,
+	       x2, y2, z2,
 	       x2, y2, z,
 	       x, y2, z);
-  add_polygon( polygons, 
-	       x, y2, z, 
+  add_polygon( polygons,
+	       x, y2, z,
 	       x, y2, z2,
 	       x2, y2, z2);
   //right side
-  add_polygon( polygons, 
-	       x2, y, z, 
+  add_polygon( polygons,
+	       x2, y, z,
 	       x2, y2, z,
 	       x2, y2, z2);
-  add_polygon( polygons, 
-	       x2, y2, z2, 
+  add_polygon( polygons,
+	       x2, y2, z2,
 	       x2, y, z2,
 	       x2, y, z);
   //left side
-  add_polygon( polygons, 
-	       x, y, z2, 
+  add_polygon( polygons,
+	       x, y, z2,
 	       x, y2, z2,
 	       x, y2, z);
-  add_polygon( polygons, 
-	       x, y2, z, 
+  add_polygon( polygons,
+	       x, y2, z,
 	       x, y, z,
-	       x, y, z2); 
+	       x, y, z2);
 }
-  
+
 /*======== void add_circle() ==========
   Inputs:   struct matrix * points
   double cx
   double cy
   double y
-  double step  
-  Returns: 
+  double step
+  Returns:
 
 
   03/16/12 19:53:52
   jdyrlandweaver
   ====================*/
-void add_circle( struct matrix * points, 
-		 double cx, double cy, 
+void add_circle( struct matrix * points,
+		 double cx, double cy,
 		 double r, double step ) {
-  
+
   double x0, y0, x, y, t;
-  
+
   x0 = cx + r;
   y0 = cy;
 
   for ( t = step; t <= 1; t+= step ) {
-    
+
     x = r * cos( 2 * M_PI * t ) + cx;
     y = r * sin( 2 * M_PI * t ) + cy;
-    
+
     add_edge( points, x0, y0, 0, x, y, 0 );
     x0 = x;
     y0 = y;
@@ -631,8 +631,8 @@ void add_circle( struct matrix * points,
   double x3
   double y3
   double step
-  int type  
-  Returns: 
+  int type
+  Returns:
 
   Adds the curve bounded by the 4 points passsed as parameters
   of type specified in type (see matrix.h for curve type constants)
@@ -641,17 +641,17 @@ void add_circle( struct matrix * points,
   03/16/12 15:24:25
   jdyrlandweaver
   ====================*/
-void add_curve( struct matrix *points, 
-		double x0, double y0, 
-		double x1, double y1, 
-		double x2, double y2, 
-		double x3, double y3, 
+void add_curve( struct matrix *points,
+		double x0, double y0,
+		double x1, double y1,
+		double x2, double y2,
+		double x3, double y3,
 		double step, int type ) {
 
   double x, y, t;
   struct matrix * xcoefs;
   struct matrix * ycoefs;
-  
+
   //generate the coeficients
   if ( type == BEZIER_MODE ) {
     ycoefs = generate_curve_coefs(y0, y1, y2, y3, BEZIER_MODE);
@@ -669,7 +669,7 @@ void add_curve( struct matrix *points,
   */
 
   for (t=step; t <= 1; t+= step) {
-    
+
     x = xcoefs->m[0][0] * t * t * t + xcoefs->m[1][0] * t * t
       + xcoefs->m[2][0] * t + xcoefs->m[3][0];
 
@@ -689,13 +689,13 @@ void add_curve( struct matrix *points,
   Inputs:   struct matrix * points
   int x
   int y
-  int z 
-  Returns: 
+  int z
+  Returns:
   adds point (x, y, z) to points and increment points.lastcol
   if points is full, should call grow on points
   ====================*/
 void add_point( struct matrix * points, double x, double y, double z) {
-  
+
   if ( points->lastcol == points->cols )
     grow_matrix( points, points->lastcol + 100 );
 
@@ -710,12 +710,12 @@ void add_point( struct matrix * points, double x, double y, double z) {
 /*======== void add_edge() ==========
   Inputs:   struct matrix * points
   int x0, int y0, int z0, int x1, int y1, int z1
-  Returns: 
+  Returns:
   add the line connecting (x0, y0, z0) to (x1, y1, z1) to points
   should use add_point
   ====================*/
-void add_edge( struct matrix * points, 
-	       double x0, double y0, double z0, 
+void add_edge( struct matrix * points,
+	       double x0, double y0, double z0,
 	       double x1, double y1, double z1) {
   add_point( points, x0, y0, z0 );
   add_point( points, x1, y1, z1 );
@@ -732,9 +732,9 @@ void add_edge( struct matrix * points,
 /* void draw_lines( struct matrix * points, screen s, color c) { */
 
 /*   int i; */
- 
+
 /*   if ( points->lastcol < 2 ) { */
-    
+
 /*     printf("Need at least 2 points to draw a line!\n"); */
 /*     return; */
 /*   } */
@@ -767,14 +767,15 @@ void add_edge( struct matrix * points,
 /* } */
 
 
+
 void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, color c, struct matrix *zb) {
- 
+
   int x, y, d, dx, dy;
   double z;
 
   x = x0;
   y = y0;
-  
+
   //swap points so we're always draing left to right
   if ( x0 > x1 ) {
     x = x1;
@@ -794,10 +795,16 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
     //slope < 1: Octant 1 (5)
     if ( dx > dy ) {
       d = dy - ( dx / 2 );
-  
+
       while ( x <= x1 ) {
 
 	z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );
+	//z = (z0-z1) / dx;
+	//z = (z0-z1) / (dx*dx + dy*dy);
+	//z = (z0-z1) * ( (x-x0) / (x1-x0) );
+	//if (x1-x0 != 0)
+	//	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+
 	plot(s, c, x, y, z, zb);
 
 	if ( d < 0 ) {
@@ -818,6 +825,12 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
       while ( y <= y1 ) {
 
 	z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );
+	//z = (z0-z1) / dx;
+	//z = (z0-z1) / (dx*dx + dy*dy);
+	//if (y1-y0 != 0)
+	//	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
+	//z = (z0-z1) * ( (y-y0) / (y1-y0) );
+
 	plot(s, c, x, y, z, zb);
 	if ( d > 0 ) {
 	  y = y + 1;
@@ -833,16 +846,22 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
   }
 
   //negative slope: Octants 7, 8 (3 and 4)
-  else { 
+  else {
 
     //slope > -1: Octant 8 (4)
     if ( dx > abs(dy) ) {
 
       d = dy + ( dx / 2 );
-  
+
       while ( x <= x1 ) {
 
 	z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );
+	//z = (z0-z1) / dx;
+	//z = (z0-z1) / (dx*dx + dy*dy);
+	//if (x1-x0 != 0)
+	//	z = z0 + ((double)x-x0)/(x1-x0)*(z1-z0);
+	//z = (z0-z1) * ( (x-x0) / (x1-x0) );
+
 	plot(s, c, x, y, z, zb);
 
 	if ( d > 0 ) {
@@ -864,7 +883,13 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
 
       while ( y >= y1 ) {
 
-	z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );	
+	z = (z0-z1) / sqrt( (x1-x0)*(x1-x0) + (y1-y0)*(y1-y0) );
+	//z = (z0-z1) / dx;
+	//z = (z0-z1) / (dx*dx + dy*dy);
+	//if (y1-y0 != 0)
+	//	z = z0 + ((double)y-y0)/(y1-y0)*(z1-z0);
+	//z = (z0-z1) * ( (y-y0) / (y1-y0) );
+
 	plot(s, c, x, y, z, zb);
 	if ( d < 0 ) {
 	  y = y - 1;
@@ -879,4 +904,3 @@ void draw_line(int x0, int y0, double z0, int x1, int y1, double z1, screen s, c
     }
   }
 }
-
